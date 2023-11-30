@@ -85,3 +85,11 @@ def review_detail_view(request, id):
 
     # step 3. Return as JSON
     return Response(data=data)
+
+@api_view(['GET'])
+def product_reviews_list_view(request):
+    if request.method == 'GET':
+        product_list = models.Product.objects.all()
+        data = serializers.ProductReviewsSerializer(instance=product_list, many=True).data
+
+        return Response(data=data)

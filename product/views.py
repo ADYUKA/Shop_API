@@ -19,6 +19,10 @@ def category_list_view(request):
         return Response(data=data)
 
     if request.method == 'POST':
+        # 0 step. Validation of data
+        serializer = serializers.CategoryValidateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
         # 1 step. GET data from request(body)
         name = request.data.get('name')
 
@@ -48,6 +52,10 @@ def category_detail_view(request, id):
         return Response(data=data)
 
     if request.method == 'PUT':
+        serializer = serializers.CategoryValidateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST, data=serializer.errors)
+
         detail_category.name = request.data.get('name')
         detail_category.save()
 
@@ -72,6 +80,9 @@ def product_list_view(request):
         return Response(data=data)
 
     if request.method == 'POST':
+        serializer = serializers.ProductValidateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
         title = request.data.get('title')
         description = request.data.get('description')
         price = request.data.get('price')
@@ -99,6 +110,9 @@ def product_detail_view(request, id):
         return Response(data=data)
 
     if request.method == 'PUT':
+        serializer = serializers.ProductValidateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
         product_detail.title = request.data.get('title')
         product_detail.description = request.data.get('description')
         product_detail.price = request.data.get('price')
@@ -125,6 +139,9 @@ def review_list_view(request):
         return Response(data=data)
 
     if request.method == 'POST':
+        serializer = serializers.ReviewValidateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
         text = request.data.get('text')
         stars = request.data.get('stars')
         product_id = request.data.get('product_id')
@@ -151,6 +168,9 @@ def review_detail_view(request, id):
         return Response(data=data)
 
     if request.method == 'PUT':
+        serializer = serializers.ReviewValidateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
         review_detail.text = request.data.get('text')
         review_detail.stars = request.data.get('stars')
         review_detail.product_id = request.data.get('product_id')
